@@ -1,5 +1,11 @@
 Revision history for Perl extension Symphero::Data.
 
+0.3  3/5/2001
+
+	README added;
+        Some minor changes while used in Symphero::Web and Symphero::SOS
+        testing.
+
 0.1  Fri Feb 23 14:35:22 2001
 	Converted from current CVS version of Symphero.
 	Testing implemented for Symphero::Utils.

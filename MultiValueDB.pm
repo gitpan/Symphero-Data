@@ -37,7 +37,7 @@ use vars qw(@ISA);
 # Version info for those who care.
 #
 use vars qw($VERSION);
-($VERSION)=('$Id: MultiValueDB.pm,v 1.2 2001/03/02 00:32:55 amaltsev Exp $' =~ /(\d+\.\d+)/);
+($VERSION)=('$Id: MultiValueDB.pm,v 1.3 2001/03/07 23:16:12 amaltsev Exp $' =~ /(\d+\.\d+)/);
 
 ##
 # Method prototypes.
@@ -757,9 +757,131 @@ Symphero::MultiValueDB - 3D database storage
 
   $db->setid('username');
 
+  my $password=$db->get('password');
+
+  $db->put(a => 123, b => 234);
+
 =head1 DESCRIPTION
 
-To be extended..
+Database support for Symphero::MultiValueHash class. Each accessing
+and mutating method of SimpleHash and MultiValueHash actually goes
+into underlying SQL database. No caching is performed (though database
+may cache data itself).
+   
+Database has the following structure (all fields may be BLOBS or have
+different sizes, no checks of size limitations performed):
+
+=over
+
+=item *
+
+id
+       
+Data hash ID (customer ID, shopping cart ID or something similar).
+
+=item *
+
+name
+       
+Parameter name.
+
+=item *
+
+subname
+       
+Parameter subname, used for multi-value parameters. Will be empty, but
+not NULL for single value parameters.
+
+=item *
+
+value
+       
+Parameter value.
+
+=back
+
+It is recommended to make index on `id' and `name' fields together and
+make primary key of `id', `name' and `subname' together. An example of
+SQL clause to create table might look like:
+   
+ CREATE TABLE ShoppingCarts (
+   id char(20) DEFAULT '' NOT NULL,
+   name char(40) DEFAULT '' NOT NULL,
+   subname char(40) DEFAULT '' NOT NULL,
+   value char(200),
+   PRIMARY KEY (id,name,subname),
+   KEY idname (id,name)
+ );
+
+=head1 METHODS
+
+All methods of L<Symphero::MultiValueHash> are available with the
+following changes and additions:
+
+=over
+
+=item *
+
+new ($@)
+       
+Instead of accepting default values for the hash itself it requires
+the following parameters:
+
+=over
+
+=item -
+
+dbh
+       
+DBI handler to SQL database.
+
+=item -
+
+table
+       
+Name of the table in that database
+
+=item -
+
+id (optional)
+
+ID of data block inside the table - shopping cart ID, session ID, user
+ID or something similar.
+   
+This parameter is optional in new() method, but required to store and
+retrieve data.
+
+=back
+
+=item *
+
+getref ($$), getsubref ($$)
+       
+Disabled - always produce warning and return undef. We cannot easily
+trace if the values reference to which we return would be modified.
+
+=item *
+
+setid ($$)
+       
+Switches the object to use new data block ID. Must be called if you did
+not pass "id" into new() method.
+
+=item *
+
+listids ($$$)
+       
+Return a list of data block IDs for which condition is met. Condition
+is represented by name-value pair. The following example will return
+the list of shopping cart IDs for given user:
+   
+  use Symphero::MultiValueDB;
+   
+  my $sdb = Symphero::MultiValueDB->new(...);
+   
+  my @ids = $sdb->listids(logname => "testuser");
+   
+  print join(",",@ids),"\n";
 
 =head1 EXPORTS
 

@@ -268,7 +268,7 @@ sub value ($)
 # That's it
 #
 use vars qw($VERSION);
-($VERSION)=('$Id: SimpleHash.pm,v 1.2 2001/03/02 00:32:55 amaltsev Exp $' =~ /(\d+\.\d+)/);
+($VERSION)=('$Id: SimpleHash.pm,v 1.3 2001/03/08 00:41:05 amaltsev Exp $' =~ /(\d+\.\d+)/);
 1;
 __END__
 
@@ -280,18 +280,130 @@ Symphero::SimpleHash - Simple 2D hash manipulations
 
   use Symphero::SimpleHash;
 
+  my $h=new Symphero::SimpleHash a => 11, b => 12, c => 13;
+
+  $h->put(d => 14);
+
+  $h->fill(\%config);
+
+  my @keys=$h->keys;
+
 =head1 DESCRIPTION
 
-To be extended..
+Base object from which various hash-like containers are derived.
+ 
+Methods are (alphabetical order, PERL API):
+
+=over
+
+=item *
+
+sub contains ($$)
+       
+Returns key of the element, containing given text. Case is
+insignificant in comparision.
+   
+If no value found `undef' is returned.
+
+=item *
+
+sub defined ($$)
+       
+Boolean method to check if element with given key defined or not.
+Exactly the same as `defined ($hash->get($key))'.
+
+=item *
+
+sub delete ($$)
+       
+Deletes given key from the hash.
+
+=item *
+
+sub exists ($$)
+       
+Checks if given key exists in the hash or not (regardless of value,
+which can be undef).
+
+=item *
+
+sub fill ($@)
+       
+Allows to fill hash with multiple values. Supports variety of argument
+formats:
+   
+   $hash->fill(key1 => value1, key2 => value2, ...);
+   
+   $hash->fill({ key1 => value1, key2 => value2, ... });
+   
+   $hash->fill([ key1 => value1 ], [ key2 => value2 ], ...);
+
+=item *
+
+sub get ($$)
+       
+Returns element by given key.
+
+=item *
+
+sub getref ($$)
+       
+Return reference to the element by given key or `undef' if such
+element does not exist.
+
+=item *
+
+sub keys ($)
+       
+Returns array of keys.
+
+=item *
+
+sub new ($;@)
+       
+Creates new hash and pre-fills it with given values. Values are in the
+same format as in fill().
+
+=item *
+
+sub put ($$$)
+       
+Puts single key-value pair into hash. Usually called as:
+   
+$hash->put(key => value);
+
+=item *
+
+sub value ($)
+       
+Pure virtual method which is supposed to be overriden in all derived
+classes. Should return the value an object as a whole.
+
+=item *
+
+sub values ($)
+       
+Returns array of values in the same order as $hash->keys returns keys
+(on non-modified hash).
+
+=head1 JAVA STYLE API
+
+In addition to normal Perl style API outlined above Symphero::SimpleHash
+allows developer to use Java style API. Here is the mapping between Perl
+API and Java API:
+
+  isSet          --  defined
+  containsKey    --  exists
+  elements       --  values
+  remove         --  delete
+  containsValue  --  contains
 
 =head1 EXPORTS
 
 Nothing.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Andrew Maltsev, <am@xao.com>
+Brave New Worlds: Bil Drury <bild@xao.com>, Andrew Maltsev <am@xao.com>.
 
 =head1 SEE ALSO
-
-=cut

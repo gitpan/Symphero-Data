@@ -1,0 +1,14 @@
+Symphero::Data is a part of Symphero e-commerce suite.
+
+It includes basic data manipulations and utility objects that are
+useful even outside of Symphero.
+
+Includes:
+ MultiValueDB.pm    - "3-dimensional" SQL data tables
+ MultiValueHash.pm  - "3-dimensional" data hash
+ SimpleHash.pm      - data hash with basic standard API that is
+                      used throughout Symphero very often.
+ Utils.pm           - a collection of utulity functions
+
+======================================================================
+Copyright (c) 2000, 2001 BNW, Inc. <am@xao.com>

@@ -5,7 +5,7 @@ WriteMakefile(
     'AUTHOR'	=> 'Andrew Maltsev <amaltsev@xao.com>',
     'ABSTRACT'	=> 'Symphero Low Level Data Modules',
     'NAME'	=> 'Symphero::Data',
-    'VERSION'	=> '0.2',
+    'VERSION'	=> '0.3',
     'PREREQ_PM'	=> { Error => 0.13
                    },
 
