@@ -1,0 +1,8 @@
+Changes
+Makefile.PL
+MANIFEST
+MultiValueDB.pm
+MultiValueHash.pm
+SimpleHash.pm
+Utils.pm
+test.pl
